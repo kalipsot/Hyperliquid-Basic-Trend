@@ -1,0 +1,9 @@
+{
+    "public": "0x",
+    "privateKey": "",
+    "webhookUrl" : "https://discord.com/api/webhooks/",
+    "leverage": 5,
+    "numberOfCoins":  25,
+    "sizeUSD": 150,
+    "maxOpenPositions": 10
+}
