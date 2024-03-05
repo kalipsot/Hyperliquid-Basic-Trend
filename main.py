@@ -111,8 +111,9 @@ class TrendFollowing:
                     coin, side, closeSz,price,{"limit": {"tif": "Ioc"}}
                 )
             logging.info(f"Order : {r} on {coin} at {price}")
-            if "filled" in r:
-                return price , sz
+            if r["response"]["data"]["statuses"][0]:
+                if 'filled' in r["response"]["data"]["statuses"][0]:
+                    return price , sz
             else:
                 self.sendError(f"Error in {coin} \nOrder : {r}")
 
