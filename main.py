@@ -17,7 +17,7 @@ class TrendFollowing:
         self.config = json.load(open("config.json"))
         self.wallet =  eth_account.Account.from_key(self.config["privateKey"])
         self.exchangeHpl = Exchange(self.wallet, constants.MAINNET_API_URL)
-        self.infoHpl = Info()
+        self.infoHpl = Info(constants.MAINNET_API_URL)
         self.webhook = DiscordWebhook(url=self.config["webhookUrl"])
         self.sizeUsd = self.config["sizeUSD"]
         self.maxOpenPositions = self.config["maxOpenPositions"]
@@ -40,10 +40,11 @@ class TrendFollowing:
     
     def checkAthDay(self,coin : str) -> int:
         twenty_day_high, price_data = self.get20DayHigh(coin)
-
+    
         price_data.reverse()
         # Check if the current price is within 5 days of the 20-day high
         index_twenty_day_high = price_data.index(twenty_day_high)
+
         if index_twenty_day_high == 0:
             return 0
         elif index_twenty_day_high <= 3:
@@ -177,6 +178,7 @@ class TrendFollowing:
                     self.sendOrder(True, True, coin, 0)
                     self.sendMsg(f"Opened long : {coin} position")
                     time.sleep(2)
+                    self.getActivePosition()
                 else:
                     logging.info(f"Position already open for {coin} or max open positions reached")
                     continue
@@ -187,6 +189,7 @@ class TrendFollowing:
                     self.sendOrder(True, False, coin, 0)
                     self.sendMsg(f"Opened short : {coin} position")
                     time.sleep(2)
+                    self.getActivePosition()
             else:
                 continue
 
